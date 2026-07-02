@@ -1,3 +1,7 @@
+var cam = view_get_camera(0);
+var cam_w = camera_get_view_width(cam);
+var cam_h = camera_get_view_height(cam);
+
 var separate = 3;
 var chunk = size + separate * 2;
 var total_slices = floor(((2 * pi * radius) / chunk) / (chunk / 2)) * (chunk / 2);
@@ -58,8 +62,7 @@ while aDiff(gang) * gdir > 0 {
 
 draw_thing(game_angle, 1);
 
-draw_set_halign(fa_center);
-draw_set_valign(fa_middle);
+
 
 /*
 draw_line(x, y, x + dcos(game_angle - angle_window) * 1000, y - dsin(game_angle - angle_window) * 1000)
@@ -70,23 +73,35 @@ draw_line(x, y, x + dcos(game_angle - min_angle_diff) * 1000, y - dsin(game_angl
 draw_line(x, y, x + dcos(game_angle + min_angle_diff) * 1000, y - dsin(game_angle + min_angle_diff) * 1000)
 draw_set_color(c_white);
 */
+
+if (hideUI) {
+	return
+}
+draw_set_halign(fa_center);
+draw_set_valign(fa_middle);
+
 draw_set_font(sys.big_font_mono);
+if (botted) {
+	draw_set_color(c_red);
+}
 draw_text_transformed(x - sys.shakeX("thing"), y - 16 - sys.shakeY("thing"), score, 3, 3, 0);
+draw_set_color(c_white);
 draw_set_font(sys.big_font);
 
 
 
 switch state {
 	case st.wait:
+		// Draw quick options
 		var cx = x;
-		var cy = room_height - 24;
+		var cy = cam_h - options_offset - 8;
 		draw_text(cx, cy - 24, "volume");
 		draw_sprite_ext(spr_bar, 0, cx, cy, 10, 1, 0, c_white, 1);
 		draw_sprite(spr_bar, 1, cx + (audio_get_master_gain(0) - 0.5) * size * 10, cy);
 		
-		draw_sprite(spr_bar, 1 + play_music, 16, room_height - 16);
+		draw_sprite(spr_bar, 1 + play_music, 16, cam_h - options_offset);
 		draw_set_halign(fa_left);
-		draw_text(32, room_height - 16, "music");
+		draw_text(32, cam_h - options_offset, "music");
 		draw_set_halign(fa_center);
 		break;
 	case st.game_over:

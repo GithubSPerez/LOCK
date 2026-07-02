@@ -4,9 +4,52 @@ last_one = 0.1;
 big_font = font_add_sprite_ext(spr_big_font, "abcdefghijklmnopqrstuvwxyz1234567890*/'\",.:", true, -1);
 big_font_mono = font_add_sprite_ext(spr_big_font, "abcdefghijklmnopqrstuvwxyz1234567890*/'\",.:", false, -1);
 
+orientation = -1;
+l_orientation = -1;
+
 shake_index = {};
 shake_ids = [];
 shake_timer = 0;
+
+game_width = 640;
+game_height = 360;
+
+window_width = 1280;
+window_height = 720;
+
+on_browser = os_browser != browser_not_a_browser
+
+if (on_browser) {
+	window_width = 960
+	window_height = 540
+}
+
+update_screen = function() {
+	var cam = view_get_camera(0);
+	switch orientation {
+		case "horizontal":
+			display_set_gui_size(window_width, window_height);
+			window_set_size(window_width, window_height);
+			camera_set_view_size(cam, game_width, game_height);
+			view_set_wport(0, window_width);
+			view_set_hport(0, window_height);
+			
+			surface_resize(application_surface, window_width, window_height);
+		break;
+		
+		case "vertical":
+			display_set_gui_size(window_height, window_width);
+			window_set_size(window_height * 0.75, window_width * 0.75);
+			camera_set_view_size(cam, game_height, game_width);
+			view_set_wport(0, window_height);
+			view_set_hport(0, window_width);
+			
+			surface_resize(application_surface, window_height, window_width);
+		break;
+	}
+	alarm[0] = 1;
+}
+
 shake = function(shake_id) {
 	if (struct_exists(shake_index, shake_id)) {
 		return shake_index[$ shake_id];
@@ -51,4 +94,12 @@ shake_set = function(shake_id, intensity) {
 	var shk = shake(shake_id);
 	shk.intensity = intensity;
 }
-randomize();
+
+random_set_seed(date_current_datetime());
+
+if (on_browser) {
+	room_goto(rm_browser);
+}
+else {
+	room_goto(rm_game);
+}

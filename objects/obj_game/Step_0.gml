@@ -1,3 +1,14 @@
+var cam = view_get_camera(0);
+
+var cam_w = camera_get_view_width(cam);
+var cam_h = camera_get_view_height(cam);
+
+x = camera_get_view_x(cam) + camera_get_view_width(cam) / 2;
+y = camera_get_view_y(cam) + camera_get_view_height(cam) / 2;
+
+options_offset = 16;
+if (sys.orientation == "vertical") options_offset = 140;
+
 var one = sys.one;
 var click = keyboard_check_pressed(vk_space) or mouse_check_button_pressed(mb_left);
 var click_held = mouse_check_button(mb_left);
@@ -76,7 +87,7 @@ var speed_up = function(n = 1) {
 
 switch state {
 	case st.wait:
-		if (slider or (abs(mouse_x - x) < 100 and mouse_y > room_height - 48)) {
+		if (slider or (abs(mouse_x - x) < 100 and mouse_y > cam_h - options_offset - 24 and mouse_y < cam_h - options_offset + 24)) {
 			
 			if (click_held) {
 				audio_set_master_gain(0, clamp(0.5 + (mouse_x - x) / 160, 0, 1))
@@ -91,7 +102,7 @@ switch state {
 				slider = false;
 			}
 		}
-		else if (mouse_x < 48 and mouse_y > room_height - 48) {
+		else if (mouse_x < 48 and mouse_y > cam_h - options_offset - 24 and mouse_y < cam_h - options_offset + 24) {
 			if (click) {
 				play_music = !play_music;
 				if (play_music) audio_play_sound(snd_dragon_coin, 1, false);
@@ -104,6 +115,7 @@ switch state {
 		else {
 			if (click) {
 				state = st.play;
+				show_click_message = false;
 				window_mouse_set_locked(true);
 				window_set_cursor(cr_none);
 			
@@ -168,6 +180,7 @@ switch state {
 
 		if (in_angle) {
 			if (!passing) passing = true;
+			if (botted) click = true;
 		}
 		else {
 			if (passing) {
@@ -207,7 +220,7 @@ switch state {
 				
 				manage_music();
 				
-				if (score > highscore) highscore = score;
+				if (score > highscore and !botted) highscore = score;
 				if (score >= checkpoint) reached_checkpoint = true;
 				passing = false;
 				
@@ -253,4 +266,3 @@ switch state {
 }
 
 if (lstate != state) state_timer = 0;
-

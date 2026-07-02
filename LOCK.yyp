@@ -2,7 +2,7 @@
   "$GMProject":"v1",
   "%Name":"LOCK",
   "AudioGroups":[
-    {"$GMAudioGroup":"","%Name":"audiogroup_default","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
+    {"$GMAudioGroup":"v1","%Name":"audiogroup_default","exportDir":"","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
   ],
   "configs":{
     "children":[],
@@ -32,14 +32,16 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.13.1.193",
+    "IDEVersion":"2024.14.4.222",
   },
   "name":"LOCK",
   "resources":[
     {"id":{"name":"obj_afterimage","path":"objects/obj_afterimage/obj_afterimage.yy",},},
+    {"id":{"name":"obj_browser","path":"objects/obj_browser/obj_browser.yy",},},
     {"id":{"name":"obj_coin","path":"objects/obj_coin/obj_coin.yy",},},
     {"id":{"name":"obj_game","path":"objects/obj_game/obj_game.yy",},},
     {"id":{"name":"sys","path":"objects/sys/sys.yy",},},
+    {"id":{"name":"rm_browser","path":"rooms/rm_browser/rm_browser.yy",},},
     {"id":{"name":"rm_game","path":"rooms/rm_game/rm_game.yy",},},
     {"id":{"name":"rm_init","path":"rooms/rm_init/rm_init.yy",},},
     {"id":{"name":"scr_angle_tools","path":"scripts/scr_angle_tools/scr_angle_tools.yy",},},
@@ -67,6 +69,7 @@
   "RoomOrderNodes":[
     {"roomId":{"name":"rm_init","path":"rooms/rm_init/rm_init.yy",},},
     {"roomId":{"name":"rm_game","path":"rooms/rm_game/rm_game.yy",},},
+    {"roomId":{"name":"rm_browser","path":"rooms/rm_browser/rm_browser.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[
