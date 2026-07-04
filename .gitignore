@@ -60,3 +60,6 @@ Temporary Items
 
 # Exports
 *.zip
+
+# env
+datafiles/env.json

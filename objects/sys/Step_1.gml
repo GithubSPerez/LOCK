@@ -18,11 +18,6 @@ if (keyboard_check_pressed(ord("F"))) {
 }
 
 var get_orientation = function() {
-	if (keyboard_check(ord("S"))) {
-		show_message(os_browser != browser_not_a_browser)
-		show_message(browser_width)
-		show_message(browser_height)
-	}
 	if (os_type == os_android || os_type == os_ios) {
 		return display_get_orientation()
 	}
@@ -55,3 +50,9 @@ if (orientation != l_orientation) {
 }
 
 l_orientation = orientation;
+
+if (keyboard_check(vk_control) && keyboard_check_pressed(ord("U"))) {
+	var name = ng_get_username();
+
+	show_message("user: " + string(name));
+}

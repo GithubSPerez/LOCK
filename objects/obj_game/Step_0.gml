@@ -50,6 +50,13 @@ var lose_game = function() {
 			audio_sound_gain(speaker, 0, 3000);
 		}
 	}
+	
+	if (got_new_best) {
+		post_highscore();
+	}
+	else {
+		post_local_highscore(score);
+	}
 }
 
 var manage_music = function(play_sound = true) {
@@ -87,6 +94,7 @@ var speed_up = function(n = 1) {
 
 switch state {
 	case st.wait:
+		
 		if (slider or (abs(mouse_x - x) < 100 and mouse_y > cam_h - options_offset - 24 and mouse_y < cam_h - options_offset + 24)) {
 			
 			if (click_held) {
@@ -113,8 +121,22 @@ switch state {
 			}
 		}
 		else {
+			var nope = false;
+			with (obj_newgrounds_button) {
+				if (is_hovering()) {
+					nope = true;
+				}
+			}
+			
+			if (nope) {
+				break;
+			}
+			
 			if (click) {
 				state = st.play;
+				with (obj_newgrounds_button) {
+					update_active();
+				}
 				show_click_message = false;
 				window_mouse_set_locked(true);
 				window_set_cursor(cr_none);
@@ -220,7 +242,15 @@ switch state {
 				
 				manage_music();
 				
-				if (score > highscore and !botted) highscore = score;
+				if (!botted) {
+					if (score > highscore) {
+						highscore = score;
+						posted_hs = false;
+						save_posted();
+						got_new_best = true;
+					}
+				}
+				
 				if (score >= checkpoint) reached_checkpoint = true;
 				passing = false;
 				
@@ -257,6 +287,9 @@ switch state {
 	case st.game_over:
 		if (keyboard_check_pressed(ord("R")) or (state_timer > 10 and click)) {
 			init_variables();
+			with (obj_newgrounds_button) {
+				update_active();
+			}
 			if (reached_checkpoint) {
 				score = checkpoint;
 				speed_up(checkpoint);

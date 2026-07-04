@@ -3,6 +3,7 @@ last_one = 0.1;
 
 big_font = font_add_sprite_ext(spr_big_font, "abcdefghijklmnopqrstuvwxyz1234567890*/'\",.:", true, -1);
 big_font_mono = font_add_sprite_ext(spr_big_font, "abcdefghijklmnopqrstuvwxyz1234567890*/'\",.:", false, -1);
+small_font = font_add_sprite_ext(spr_font, "abcdefghijklmnopqrstuvwxyz0123456789.:", true, -1);
 
 orientation = -1;
 l_orientation = -1;
@@ -18,6 +19,8 @@ window_width = 1280;
 window_height = 720;
 
 on_browser = os_browser != browser_not_a_browser
+
+browser_scale = 1280 / 960;
 
 if (on_browser) {
 	window_width = 960
@@ -96,6 +99,33 @@ shake_set = function(shake_id, intensity) {
 }
 
 random_set_seed(date_current_datetime());
+
+NG = {
+	app_id: "",
+	app_key: "",
+	board_id: ""
+}
+
+var env = load_env();
+
+if (env != undefined) {
+	NG.app_id = env.ng.app_id;
+	NG.app_key = env.ng.app_key;
+	NG.board_id = env.ng.board_id;
+}
+
+ng_connect(NG.app_id, NG.app_key);
+ng_initialize_medals_and_scoreboard();
+
+is_logged_in = function () {
+	var name = ng_get_username();
+	if (string(name) != "") {
+		return true;
+	}
+	return false;
+}
+
+
 
 if (on_browser) {
 	room_goto(rm_browser);

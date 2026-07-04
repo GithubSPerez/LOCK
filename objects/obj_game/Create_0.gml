@@ -24,11 +24,28 @@ slowmo_time = 20;
 score_scale = 30;
 state_timer = 0;
 
+local_highscore = 0;
+
+save_posted = function() {
+	ini_open("record.ini");
+	ini_write_real("options", "fresh", posted_hs);
+	ini_close();
+}
+
+load_posted = function() {
+	ini_open("record.ini");
+	posted_hs = ini_read_real("options", "fresh", 0);
+	ini_close();
+}
+
 var f = ini_open("record.ini")
 highscore = ini_read_real("record", "highscore", 0);
 audio_set_master_gain(0, ini_read_real("options", "volume", 0.25));
 play_music = ini_read_real("options", "music", true);
 ini_close();
+
+posted_hs = false;
+load_posted();
 
 audio_sound_loop_start(mus_lock, 14.382);
 
@@ -93,6 +110,7 @@ init_variables = function() {
 	coin_timer = 0;
 
 	score = 0;
+	got_new_best = false;
 }
 
 onBeat = function () {
@@ -102,6 +120,37 @@ onBeat = function () {
 			if (speaker != noone) {
 				audio_sound_pitch(speaker, pre_music_play_pitch + (1 - pre_music_play_pitch) * (beat_score / checkpoint));
 			}
+		}
+	}
+}
+
+post_highscore = function() {
+	if (highscore == 0) {
+		return;
+	}
+	
+	if (sys.is_logged_in()) {
+		if (!posted_hs) {
+			ng_postScore(sys.NG.board_id, highscore);
+			posted_hs = true;
+			save_posted();
+		}
+	}
+}
+
+post_local_highscore = function(local_score) {
+	if (local_score == 0) {
+		return;
+	}
+	
+	if (sys.is_logged_in()) {
+		if (local_highscore == highscore) {
+			return;
+		}
+		
+		if (local_score > local_highscore) {
+			local_highscore = local_score;
+			ng_postScore(sys.NG.board_id, local_highscore)
 		}
 	}
 }
