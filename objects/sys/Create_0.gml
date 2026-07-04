@@ -15,6 +15,9 @@ shake_timer = 0;
 game_width = 640;
 game_height = 360;
 
+gui_width = game_width * 2;
+gui_height = game_height * 2;
+
 window_width = 1280;
 window_height = 720;
 
@@ -31,7 +34,7 @@ update_screen = function() {
 	var cam = view_get_camera(0);
 	switch orientation {
 		case "horizontal":
-			display_set_gui_size(window_width, window_height);
+			display_set_gui_size(gui_width, gui_height);
 			window_set_size(window_width, window_height);
 			camera_set_view_size(cam, game_width, game_height);
 			view_set_wport(0, window_width);
@@ -41,7 +44,7 @@ update_screen = function() {
 		break;
 		
 		case "vertical":
-			display_set_gui_size(window_height, window_width);
+			display_set_gui_size(gui_height, gui_width);
 			window_set_size(window_height * 0.75, window_width * 0.75);
 			camera_set_view_size(cam, game_height, game_width);
 			view_set_wport(0, window_height);
